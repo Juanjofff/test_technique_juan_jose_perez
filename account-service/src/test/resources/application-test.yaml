@@ -1,0 +1,35 @@
+spring:
+  webflux:
+    base-path: /api/v1
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+  h2:
+    console:
+      enabled: true
+  kafka:
+    bootstrap-servers: ${spring.embedded.kafka.brokers}
+    consumer:
+      group-id: account-service-group-test
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.type.mapping: customerCreatedEvent:ec.juanperez.test.technique.events.CustomerCreatedEvent,customerUpdatedEvent:ec.juanperez.test.technique.events.CustomerUpdatedEvent,customerDeletedEvent:ec.juanperez.test.technique.events.CustomerDeletedEvent
+
+logging:
+  level:
+    root: INFO
+    ec.juanperez.test.technique: DEBUG
+    org.springframework.kafka: DEBUG
+

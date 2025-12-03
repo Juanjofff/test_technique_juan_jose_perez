@@ -1,0 +1,89 @@
+spring:
+  application:
+    name: technique
+  webflux:
+    base-path: /api/v1
+  datasource:
+    url: jdbc:postgresql://localhost:5432/test_technique_juan_jose_perez
+    username: postgres
+    password: Macara_90
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      leak-detection-threshold: 60000
+      pool-name: TechniqueHikariPool
+      data-source-properties:
+        applicationName: technique-application
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        jdbc:
+          batch_size: 20
+          batch_versioned_data: true
+        order_inserts: true
+        order_updates: true
+        generate_statistics: false
+  docker:
+    compose:
+      enabled: false
+
+server:
+  port: 8080
+  netty:
+    connection-timeout: 30s
+    idle-timeout: 60s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+      probes:
+        enabled: true
+  health:
+    db:
+      enabled: true
+    diskspace:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: false
+    tags:
+      application: ${spring.application.name}
+
+logging:
+  level:
+    root: INFO
+    ec.juanperez.test.technique: INFO
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG # Enable only for debugging
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE # Enable only for debugging
+    org.hibernate.orm.connections.pooling: WARN # Reduce verbose connection pool messages
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    use-root-path: false
+    operations-sorter: method
+    tags-sorter: alpha
+  paths-to-match: /**
+  show-actuator: false

@@ -1,0 +1,102 @@
+spring:
+  application:
+    name: customer-service
+  webflux:
+    base-path: /api/v1
+  datasource:
+    url: jdbc:postgresql://localhost:5432/test_technique_juan_jose_perez
+    username: postgres
+    password: Macara_90
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      leak-detection-threshold: 60000
+      pool-name: CustomerServiceHikariPool
+      data-source-properties:
+        applicationName: customer-service
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        jdbc:
+          batch_size: 20
+          batch_versioned_data: true
+        order_inserts: true
+        order_updates: true
+        generate_statistics: false
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+    consumer:
+      group-id: customer-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.type.mapping: customerCreatedEvent:ec.juanperez.test.technique.events.CustomerCreatedEvent,customerUpdatedEvent:ec.juanperez.test.technique.events.CustomerUpdatedEvent,customerDeletedEvent:ec.juanperez.test.technique.events.CustomerDeletedEvent
+
+server:
+  port: 8081
+  netty:
+    connection-timeout: 30s
+    idle-timeout: 60s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+      probes:
+        enabled: true
+  health:
+    db:
+      enabled: true
+    diskspace:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: false
+    tags:
+      application: ${spring.application.name}
+
+logging:
+  level:
+    root: INFO
+    ec.juanperez.test.technique: INFO
+    org.springframework.web: INFO
+    org.springframework.kafka: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.orm.connections.pooling: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    use-root-path: false
+    operations-sorter: method
+    tags-sorter: alpha
+  paths-to-match: /**
+  show-actuator: false
+

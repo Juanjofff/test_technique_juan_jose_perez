@@ -1,0 +1,31 @@
+# Docker Compose para pruebas de Kafka
+# Uso: docker-compose -f compose.yaml -f docker-compose.test.yml up
+
+version: '3.8'
+
+services:
+  # Override para agregar herramientas de debugging
+  customer-service:
+    environment:
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_KAFKA=DEBUG
+      - LOGGING_LEVEL_EC_JUANPEREZ_TEST_TECHNIQUE=DEBUG
+
+  account-service:
+    environment:
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_KAFKA=DEBUG
+      - LOGGING_LEVEL_EC_JUANPEREZ_TEST_TECHNIQUE=DEBUG
+
+  # Servicio adicional para testing
+  kafka-test-tools:
+    image: confluentinc/cp-kafka:latest
+    container_name: technique-kafka-test-tools
+    depends_on:
+      - kafka
+    networks:
+      - default
+    command: tail -f /dev/null
+    profiles:
+      - test
+
