@@ -1,0 +1,167 @@
+openapi: 3.1.0
+info:
+  title: Technical Test API
+  description: API for Technical Test by Juan Jose Perez
+  contact:
+    name: Juan Jose Perez
+    email: juanjoperez090@gmail.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: /api/v1
+  description: API Server
+tags:
+- name: Customers
+  description: Customer management API
+paths:
+  /customers/{id}:
+    get:
+      tags:
+      - Customers
+      summary: Get customer by ID
+      description: Retrieve a customer by its ID
+      operationId: findById
+      parameters:
+      - name: id
+        in: path
+        description: Customer ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Customer found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerDTO"
+        "404":
+          description: Customer not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CustomerDTO"
+    put:
+      tags:
+      - Customers
+      summary: Update a customer
+      description: Update an existing customer by ID
+      operationId: update
+      parameters:
+      - name: id
+        in: path
+        description: Customer ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomerDTO"
+        required: true
+      responses:
+        "200":
+          description: Customer updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerDTO"
+        "404":
+          description: Customer not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CustomerDTO"
+        "400":
+          description: Customer is deleted
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CustomerDTO"
+    delete:
+      tags:
+      - Customers
+      summary: Delete a customer
+      description: Delete a customer by ID
+      operationId: delete
+      parameters:
+      - name: id
+        in: path
+        description: Customer ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: Customer deleted successfully
+        "404":
+          description: Customer not found
+  /customers:
+    get:
+      tags:
+      - Customers
+      summary: Get all customers
+      description: Retrieve all active customers
+      operationId: findAll
+      responses:
+        "200":
+          description: Successfully retrieved list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerDTO"
+    post:
+      tags:
+      - Customers
+      summary: Create a new customer
+      description: Create a new customer
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomerDTO"
+        required: true
+      responses:
+        "200":
+          description: Customer created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerDTO"
+components:
+  schemas:
+    CustomerDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        gender:
+          type: string
+          enum:
+          - MALE
+          - FEMALE
+          - OTHER
+        identification:
+          type: string
+        address:
+          type: string
+        phone:
+          type: string
+        id:
+          type: integer
+          format: int64
+        password:
+          type: string
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - DELETED

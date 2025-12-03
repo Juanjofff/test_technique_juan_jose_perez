@@ -54,6 +54,25 @@ docker-compose up -d
   - Customer: http://localhost:8081/api/v1/swagger-ui.html
   - Account: http://localhost:8082/api/v1/swagger-ui.html
 
+## Especificaciones OpenAPI
+
+Las especificaciones OpenAPI están disponibles en formato YAML en la carpeta `docs/`:
+
+- `docs/customer-service-openapi.yaml` - Especificación del Customer Service
+- `docs/account-service-openapi.yaml` - Especificación del Account Service
+
+Para generar los archivos OpenAPI:
+
+```bash
+# Asegúrate de que los servicios estén corriendo
+docker-compose up -d
+
+# Ejecutar el script de generación
+./generate-openapi.sh
+```
+
+Ver más detalles en [docs/README.md](docs/README.md)
+
 ## Probar que funciona
 
 Hay un script que prueba todo el flujo de eventos de Kafka:
