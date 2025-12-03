@@ -2,14 +2,15 @@ package ec.juanperez.test.technique.app.reports.service.impl;
 
 import ec.juanperez.test.technique.app.accounts.dto.AccountDTO;
 import ec.juanperez.test.technique.app.accounts.service.AccountService;
-import ec.juanperez.test.technique.app.customers.exception.CustomerNotFoundException;
-import ec.juanperez.test.technique.app.customers.service.CustomerService;
+import ec.juanperez.test.technique.app.dto.CustomerDTO;
+import ec.juanperez.test.technique.app.exception.CustomerReferenceNotFoundException;
 import ec.juanperez.test.technique.app.movements.dto.MovementDTO;
 import ec.juanperez.test.technique.app.movements.service.MovementService;
 import ec.juanperez.test.technique.app.reports.dto.ReportAccountDTO;
 import ec.juanperez.test.technique.app.reports.service.ReportService;
 import ec.juanperez.test.technique.app.reports.util.ReportAccountUtil;
-import ec.juanperez.test.technique.app.person.dto.PersonDTO;
+import ec.juanperez.test.technique.model.CustomerReference;
+import ec.juanperez.test.technique.repository.CustomerReferenceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ import java.util.Optional;
 @Service
 public class ReportServiceImpl implements ReportService {
 
-    private final CustomerService customerService;
+    private final CustomerReferenceRepository customerReferenceRepository;
     private final MovementService movementService;
     private final AccountService accountService;
     private final ReportAccountUtil reportAccountUtil;
@@ -34,25 +35,39 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public ReportAccountDTO getAccountStatementByCustomerIdAndDates(Long customerId, LocalDateTime startTime, LocalDateTime endTime) {
         ReportAccountDTO report = new ReportAccountDTO();
-        Optional<PersonDTO> optionalPersonDTO = this.customerService.findByIdReport(customerId);
-        if (optionalPersonDTO.isEmpty()){
-            log.error("Customer not found with id: {}", customerId);
-            throw new CustomerNotFoundException(customerId);
+        Optional<CustomerReference> optionalCustomerRef = this.customerReferenceRepository.findById(customerId);
+        if (optionalCustomerRef.isEmpty()){
+            log.error("Customer reference not found with id: {}", customerId);
+            throw new CustomerReferenceNotFoundException(customerId);
         }
-        report.setCustomer(optionalPersonDTO.get());
+        
+        CustomerReference customerRef = optionalCustomerRef.get();
+        CustomerDTO customerDTO = new CustomerDTO(
+            customerRef.getId(),
+            customerRef.getName(),
+            customerRef.getIdentification(),
+            customerRef.getStatus().name()
+        );
+        report.setCustomer(customerDTO);
         report.setMovements(this.movementService.getMovementsByCustomerIdAndDates(customerId, startTime, endTime));
         return report;
     }
 
     @Override
     public byte[] generateExcelReport(Long customerId, LocalDateTime startTime, LocalDateTime endTime) {
-        Optional<PersonDTO> optionalPersonDTO = this.customerService.findByIdReport(customerId);
-        if (optionalPersonDTO.isEmpty()){
-            log.error("Customer not found with id: {}", customerId);
-            throw new CustomerNotFoundException(customerId);
+        Optional<CustomerReference> optionalCustomerRef = this.customerReferenceRepository.findById(customerId);
+        if (optionalCustomerRef.isEmpty()){
+            log.error("Customer reference not found with id: {}", customerId);
+            throw new CustomerReferenceNotFoundException(customerId);
         }
         
-        PersonDTO customer = optionalPersonDTO.get();
+        CustomerReference customerRef = optionalCustomerRef.get();
+        CustomerDTO customer = new CustomerDTO(
+            customerRef.getId(),
+            customerRef.getName(),
+            customerRef.getIdentification(),
+            customerRef.getStatus().name()
+        );
         List<AccountDTO> accounts = this.accountService.findAllByCustomerId(customerId);
         Map<String, List<MovementDTO>> movementsMap =
                 this.movementService.getMovementsByCustomerIdAndDates(customerId, startTime, endTime);

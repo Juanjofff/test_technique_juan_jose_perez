@@ -2,8 +2,7 @@ package ec.juanperez.test.technique.app.common.exception;
 
 import ec.juanperez.test.technique.app.accounts.exception.AccountDeletedException;
 import ec.juanperez.test.technique.app.accounts.exception.AccountNotFoundException;
-import ec.juanperez.test.technique.app.customers.exception.CustomerDeletedException;
-import ec.juanperez.test.technique.app.customers.exception.CustomerNotFoundException;
+import ec.juanperez.test.technique.app.exception.CustomerReferenceNotFoundException;
 import ec.juanperez.test.technique.app.movements.exceptions.MovementBalanceException;
 import ec.juanperez.test.technique.app.movements.exceptions.MovementNotFoundException;
 import ec.juanperez.test.technique.app.movements.exceptions.MovementValueException;
@@ -27,17 +26,11 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Customer Exceptions
-    @ExceptionHandler(CustomerNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleCustomerNotFoundException(CustomerNotFoundException ex) {
-        log.error("Customer not found: {}", ex.getMessage());
+    // Customer Reference Exceptions
+    @ExceptionHandler(CustomerReferenceNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleCustomerReferenceNotFoundException(CustomerReferenceNotFoundException ex) {
+        log.error("Customer reference not found: {}", ex.getMessage());
         return buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage());
-    }
-
-    @ExceptionHandler(CustomerDeletedException.class)
-    public ResponseEntity<Map<String, Object>> handleCustomerDeletedException(CustomerDeletedException ex) {
-        log.error("Customer deleted: {}", ex.getMessage());
-        return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     // Account Exceptions

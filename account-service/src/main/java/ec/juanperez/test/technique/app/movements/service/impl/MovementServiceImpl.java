@@ -4,7 +4,6 @@ import ec.juanperez.test.technique.app.accounts.dto.AccountDTO;
 import ec.juanperez.test.technique.app.accounts.exception.AccountNotFoundException;
 import ec.juanperez.test.technique.app.accounts.service.AccountService;
 import ec.juanperez.test.technique.app.movements.enums.MovementType;
-import ec.juanperez.test.technique.app.customers.exception.CustomerNotFoundException;
 import ec.juanperez.test.technique.app.movements.dto.MovementDTO;
 import ec.juanperez.test.technique.app.movements.exceptions.MovementBalanceException;
 import ec.juanperez.test.technique.app.movements.exceptions.MovementValueException;
@@ -76,7 +75,7 @@ public class MovementServiceImpl implements MovementService {
         Optional<MovementDTO> optionalMovementDTO = this.findById(id);
         if (optionalMovementDTO.isEmpty()) {
             log.error("Movement not found with id: {}", id);
-            throw new CustomerNotFoundException(id);
+            throw new MovementNotFoundException(id);
         }
         this.repository.deleteById(id);
     }

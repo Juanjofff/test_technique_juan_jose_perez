@@ -1,12 +1,7 @@
 package ec.juanperez.test.technique.app.common.exception;
 
-import ec.juanperez.test.technique.app.accounts.exception.AccountDeletedException;
-import ec.juanperez.test.technique.app.accounts.exception.AccountNotFoundException;
 import ec.juanperez.test.technique.app.customers.exception.CustomerDeletedException;
 import ec.juanperez.test.technique.app.customers.exception.CustomerNotFoundException;
-import ec.juanperez.test.technique.app.movements.exceptions.MovementBalanceException;
-import ec.juanperez.test.technique.app.movements.exceptions.MovementNotFoundException;
-import ec.juanperez.test.technique.app.movements.exceptions.MovementValueException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -37,38 +32,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CustomerDeletedException.class)
     public ResponseEntity<Map<String, Object>> handleCustomerDeletedException(CustomerDeletedException ex) {
         log.error("Customer deleted: {}", ex.getMessage());
-        return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
-    }
-
-    // Account Exceptions
-    @ExceptionHandler(AccountNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleAccountNotFoundException(AccountNotFoundException ex) {
-        log.error("Account not found: {}", ex.getMessage());
-        return buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage());
-    }
-
-    @ExceptionHandler(AccountDeletedException.class)
-    public ResponseEntity<Map<String, Object>> handleAccountDeletedException(AccountDeletedException ex) {
-        log.error("Account deleted: {}", ex.getMessage());
-        return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
-    }
-
-    // Movement Exceptions
-    @ExceptionHandler(MovementNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleMovementNotFoundException(MovementNotFoundException ex) {
-        log.error("Movement not found: {}", ex.getMessage());
-        return buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage());
-    }
-
-    @ExceptionHandler(MovementBalanceException.class)
-    public ResponseEntity<Map<String, Object>> handleMovementBalanceException(MovementBalanceException ex) {
-        log.error("Insufficient balance: {}", ex.getMessage());
-        return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
-    }
-
-    @ExceptionHandler(MovementValueException.class)
-    public ResponseEntity<Map<String, Object>> handleMovementValueException(MovementValueException ex) {
-        log.error("Invalid movement value: {}", ex.getMessage());
         return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 

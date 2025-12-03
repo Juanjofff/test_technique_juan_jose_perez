@@ -8,7 +8,6 @@ import ec.juanperez.test.technique.app.accounts.model.Account;
 import ec.juanperez.test.technique.app.accounts.repository.AccountRepository;
 import ec.juanperez.test.technique.app.accounts.service.AccountService;
 import ec.juanperez.test.technique.app.common.enums.StatusType;
-import ec.juanperez.test.technique.app.customers.exception.CustomerNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -65,7 +64,7 @@ public class AccountServiceImpl implements AccountService {
         Optional<AccountDTO> optionalAccountDTO = this.findById(id);
         if (optionalAccountDTO.isEmpty()) {
             log.error("Account not found with id: {}", id);
-            throw new CustomerNotFoundException(id);
+            throw new AccountNotFoundException(id);
         }
         AccountDTO customerDTO = optionalAccountDTO.get();
         customerDTO.setStatus(StatusType.DELETED);

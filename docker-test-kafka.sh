@@ -53,7 +53,7 @@ echo -e "${BLUE}2. Verificando health checks...${NC}"
 echo ""
 
 # Verificar Customer Service
-CUSTOMER_HEALTH=$(docker exec technique-customer-service curl -s -o /dev/null -w "%{http_code}" http://localhost:8081/actuator/health 2>/dev/null || echo "000")
+CUSTOMER_HEALTH=$(docker exec technique-customer-service curl -s -o /dev/null -w "%{http_code}" http://localhost:8081/api/v1/actuator/health 2>/dev/null || echo "000")
 if [ "$CUSTOMER_HEALTH" = "200" ]; then
     echo -e "${GREEN}✓ Customer Service está saludable${NC}"
 else
@@ -63,7 +63,7 @@ else
 fi
 
 # Verificar Account Service
-ACCOUNT_HEALTH=$(docker exec technique-account-service curl -s -o /dev/null -w "%{http_code}" http://localhost:8082/actuator/health 2>/dev/null || echo "000")
+ACCOUNT_HEALTH=$(docker exec technique-account-service curl -s -o /dev/null -w "%{http_code}" http://localhost:8082/api/v1/actuator/health 2>/dev/null || echo "000")
 if [ "$ACCOUNT_HEALTH" = "200" ]; then
     echo -e "${GREEN}✓ Account Service está saludable${NC}"
 else

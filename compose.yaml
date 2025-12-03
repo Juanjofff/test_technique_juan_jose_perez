@@ -7,7 +7,7 @@ services:
       - 'POSTGRES_PASSWORD=secret'
       - 'POSTGRES_USER=myuser'
     ports:
-      - '5432:5432'
+      - '5433:5432' # Puerto de la base de datos. 5433 porque ya tenia una base local en 5432
     volumes:
       - ./databases/create_db:/docker-entrypoint-initdb.d
     healthcheck:
@@ -26,7 +26,7 @@ services:
       - "2181:2181"
 
   kafka:
-    image: confluentinc/cp-kafka:latest
+    image: confluentinc/cp-kafka:7.9.5
     container_name: technique-kafka
     depends_on:
       - zookeeper

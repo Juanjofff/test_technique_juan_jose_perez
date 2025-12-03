@@ -19,7 +19,7 @@ public class CustomerEventConsumer {
 
     private final CustomerReferenceRepository customerReferenceRepository;
 
-    @KafkaListener(topics = "customer-created", groupId = "account-service-group")
+    @KafkaListener(topics = "customer-created", groupId = "account-service-group", containerFactory = "customerCreatedKafkaListenerContainerFactory")
     @Transactional
     public void consumeCustomerCreated(CustomerCreatedEvent event) {
         log.info("Received CustomerCreatedEvent for customer ID: {}", event.getCustomerId());
@@ -34,7 +34,7 @@ public class CustomerEventConsumer {
         log.info("CustomerReference created for customer ID: {}", event.getCustomerId());
     }
 
-    @KafkaListener(topics = "customer-updated", groupId = "account-service-group")
+    @KafkaListener(topics = "customer-updated", groupId = "account-service-group", containerFactory = "customerUpdatedKafkaListenerContainerFactory")
     @Transactional
     public void consumeCustomerUpdated(CustomerUpdatedEvent event) {
         log.info("Received CustomerUpdatedEvent for customer ID: {}", event.getCustomerId());
@@ -52,7 +52,7 @@ public class CustomerEventConsumer {
                 );
     }
 
-    @KafkaListener(topics = "customer-deleted", groupId = "account-service-group")
+    @KafkaListener(topics = "customer-deleted", groupId = "account-service-group", containerFactory = "customerDeletedKafkaListenerContainerFactory")
     @Transactional
     public void consumeCustomerDeleted(CustomerDeletedEvent event) {
         log.info("Received CustomerDeletedEvent for customer ID: {}", event.getCustomerId());

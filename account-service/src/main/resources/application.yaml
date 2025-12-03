@@ -4,9 +4,9 @@ spring:
   webflux:
     base-path: /api/v1
   datasource:
-    url: jdbc:postgresql://localhost:5432/test_technique_juan_jose_perez
-    username: postgres
-    password: Macara_90
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/test_technique_juan_jose_perez}
+    username: ${SPRING_DATASOURCE_USERNAME:myuser}
+    password: ${SPRING_DATASOURCE_PASSWORD:secret}
     driver-class-name: org.postgresql.Driver
     hikari:
       minimum-idle: 5
@@ -32,13 +32,14 @@ spring:
         order_updates: true
         generate_statistics: false
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     consumer:
       group-id: account-service-group
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "*"
+        spring.json.use.type.headers: false
         spring.json.type.mapping: customerCreatedEvent:ec.juanperez.test.technique.events.CustomerCreatedEvent,customerUpdatedEvent:ec.juanperez.test.technique.events.CustomerUpdatedEvent,customerDeletedEvent:ec.juanperez.test.technique.events.CustomerDeletedEvent
 
 server:

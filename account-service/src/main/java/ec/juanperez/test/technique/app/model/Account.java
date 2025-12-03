@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import ec.juanperez.test.technique.app.accounts.enums.AccountType;
 import ec.juanperez.test.technique.app.common.enums.StatusType;
-import ec.juanperez.test.technique.app.customers.model.Customer;
+import ec.juanperez.test.technique.model.CustomerReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,5 +38,5 @@ public class Account {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cliente", nullable = false)
-    private Customer customer;
+    private CustomerReference customer;
 }

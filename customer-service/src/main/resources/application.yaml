@@ -4,9 +4,9 @@ spring:
   webflux:
     base-path: /api/v1
   datasource:
-    url: jdbc:postgresql://localhost:5432/test_technique_juan_jose_perez
-    username: postgres
-    password: Macara_90
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/test_technique_juan_jose_perez}
+    username: ${SPRING_DATASOURCE_USERNAME:myuser}
+    password: ${SPRING_DATASOURCE_PASSWORD:secret}
     driver-class-name: org.postgresql.Driver
     hikari:
       minimum-idle: 5
@@ -32,7 +32,7 @@ spring:
         order_updates: true
         generate_statistics: false
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer

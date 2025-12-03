@@ -1,8 +1,8 @@
 package ec.juanperez.test.technique.app.reports.util;
 
 import ec.juanperez.test.technique.app.accounts.dto.AccountDTO;
+import ec.juanperez.test.technique.app.dto.CustomerDTO;
 import ec.juanperez.test.technique.app.movements.dto.MovementDTO;
-import ec.juanperez.test.technique.app.person.dto.PersonDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -22,7 +22,7 @@ import java.util.Optional;
 public class ReportAccountUtil {
     
     public byte[] generateExcelReport(
-            PersonDTO customer,
+            CustomerDTO customer,
             List<AccountDTO> accounts,
             Map<String, List<MovementDTO>> movementsMap,
             Map<Long, BigDecimal> accountBalances,
@@ -100,7 +100,7 @@ public class ReportAccountUtil {
         return dataStyle;
     }
     
-    private int addCustomerInfo(Sheet sheet, PersonDTO customer, CellStyle headerStyle, CellStyle dataStyle, int rowNum) {
+    private int addCustomerInfo(Sheet sheet, CustomerDTO customer, CellStyle headerStyle, CellStyle dataStyle, int rowNum) {
         Row customerRow = sheet.createRow(rowNum++);
         Cell customerLabelCell = customerRow.createCell(0);
         customerLabelCell.setCellValue("Cliente:");
